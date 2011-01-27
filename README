@@ -1,0 +1,8 @@
+DATABASE MONITOR
+
+	This is a simple daemon to compare DB queries and notify by email.
+
+
+CONFIGURATION
+
+	All the things you need to specify are in config.yml.sample. Once you want to use it, you need to rename it to config.yml.
