@@ -1,6 +1,8 @@
 # monitor stuff
 .rvmrc
 config.yml
+*.log
+*.pid
 
 # rcov generated
 coverage
