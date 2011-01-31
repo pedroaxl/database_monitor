@@ -8,8 +8,7 @@ require 'optparse'
 require 'ostruct'
 require 'yaml'
 
-require File.dirname(__FILE__) + '/database_monitor'
-#require File.dirname(__FILE__) + '/config'
+require File.dirname(__FILE__) + '/monitor'
 
 module DatabaseMonitor
   class Daemon
@@ -23,7 +22,7 @@ module DatabaseMonitor
       @options = OpenStruct.new
       @options.config_file = 'config.yml'
       @options.verbose = false
-      @options.log_file = nil
+      @options.log_file = 'monitor.log'
       @options.pid_file = 'monitor.pid'
 
       @config = nil
@@ -70,11 +69,7 @@ module DatabaseMonitor
 
     def set_logger
       require 'logger'
-      if @options.log_file.nil?
-        @log = Logger.new(STDERR)
-      else
-        @log = Logger.new(@options.log_file, 'daily')
-      end
+      @log = Logger.new(@options.log_file, 'daily')
       @log.level = Logger::INFO
     end
 
@@ -113,7 +108,7 @@ module DatabaseMonitor
     end
     
     def start_monitor
-      Monitor.new(@config).run
+      Monitor.new(@config, @log).run
     end
   end
 end

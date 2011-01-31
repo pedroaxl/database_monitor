@@ -1,6 +1,12 @@
 source "http://rubygems.org"
 gem "sequel", "~> 3.19"
 gem "pony", "~> 1.0"
+
+# You need to uncomment the adapter you need and run bundle install again
+gem "pg", "~> 0.10"
+# gem "mysql", "~> 2.8"
+# gem "sqlite3", "~> 1.3"
+
 # Add dependencies required to use your gem here.
 # Example:
 #   gem "activesupport", ">= 2.3.5"

@@ -1,9 +1,16 @@
 require 'helper'
 require 'monitor'
 
+class Logger
+  def info(a)
+  end
+  def debug(a)
+  end
+end
+
 class DatabaseMonitor::Monitor
   @@counter = []
-  def self.notify(match, result, old_result)
+  def self.notify(match, result, old_result, config=nil, name=nil)
     body = %{
 Hello,
 I need to notify you that we had a problem with your database queries.
@@ -27,7 +34,7 @@ class TestMonitor < Test::Unit::TestCase
   def setup
     create_database
     populate_database
-    @m = DatabaseMonitor::Monitor.new(config)
+    @m = DatabaseMonitor::Monitor.new(config, Logger.new)
   end
   
   def test_empty?
@@ -59,7 +66,7 @@ class TestMonitor < Test::Unit::TestCase
   def test_compare_equal_values
     old_value = @db[config["queries"]["queue_deliveries"]["sql"]].all
     
-    d = DatabaseMonitor::Monitor.new(config)
+    d = DatabaseMonitor::Monitor.new(config, Logger.new)
     
     v = DatabaseMonitor::Monitor.counter.size
     d.compare_queries("queue_deliveries")
@@ -73,7 +80,7 @@ class TestMonitor < Test::Unit::TestCase
     
     config_f = config
     config_f["queries"]["queue_deliveries"]["notifications"]["equal"] = false
-    d = DatabaseMonitor::Monitor.new(config_f)
+    d = DatabaseMonitor::Monitor.new(config_f, Logger.new)
     v = DatabaseMonitor::Monitor.counter.size
     d.compare_queries("queue_deliveries")
     assert_equal v, DatabaseMonitor::Monitor.counter.size
@@ -82,7 +89,7 @@ class TestMonitor < Test::Unit::TestCase
   end
   
   def test_compare_different_values    
-   d = DatabaseMonitor::Monitor.new(config)
+   d = DatabaseMonitor::Monitor.new(config, Logger.new)
    v = DatabaseMonitor::Monitor.counter.size
    d.compare_queries("queue_deliveries")
    assert_equal v, DatabaseMonitor::Monitor.counter.size
@@ -93,7 +100,7 @@ class TestMonitor < Test::Unit::TestCase
    config_f = config
    config_f["queries"]["queue_deliveries"]["notifications"]["different"] = true
    
-   d = DatabaseMonitor::Monitor.new(config_f)
+   d = DatabaseMonitor::Monitor.new(config_f, Logger.new)
    v = DatabaseMonitor::Monitor.counter.size
    d.compare_queries("queue_deliveries")
    assert_equal v, DatabaseMonitor::Monitor.counter.size
@@ -106,7 +113,7 @@ class TestMonitor < Test::Unit::TestCase
   end
 
   def test_compare_partial_match_values
-    d = DatabaseMonitor::Monitor.new(config)
+    d = DatabaseMonitor::Monitor.new(config, Logger.new)
     v = DatabaseMonitor::Monitor.counter.size
     d.compare_queries("queue_deliveries")
     assert_equal v, DatabaseMonitor::Monitor.counter.size

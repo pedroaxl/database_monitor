@@ -20,11 +20,7 @@ queries:
     sql: SELECT message_id, count(*) from queue_deliveries GROUP BY message_id
     notifications:
       # those are the cases you want to be notified in the transitions
-      empty: false
-        # this is the only state that is not a transition
-      equal: true
-        # if all the values continue equal 
-      different: false
-        # if all the values are different
-      partial_match: true
-        # if some values are equal
+      empty: false          # if your query returns empty
+      equal: true           # if all the values continue equal 
+      different: false      # if all the values are different
+      partial_match: true   # if some values are equal
