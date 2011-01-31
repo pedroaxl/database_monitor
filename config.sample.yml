@@ -1,0 +1,30 @@
+database:
+  # more info: http://rubydoc.info/gems/sequel/3.19.0/file/README.rdoc#Connecting_to_a_database
+  connection_string: database://user:password@host:port/database_name
+
+email:
+  # we always use gmail accounts to ensure in case everything is down the mail will be delivered
+  from_address: contact@softa.com.br
+  to_address: ['pedro@softa.com.br', 'maiz@softa.com.br', 'diogo@softa.com.br', 'cabral@softa.com.br']
+  subject: '[Database Monitor] Trouble detected!'
+  
+  username: john
+  password: 1234
+  
+options:
+  # the time we wait between the queries (given in seconds)
+  timeout: 60
+
+queries:
+  queue_deliveries:
+    sql: SELECT message_id, count(*) from queue_deliveries GROUP BY message_id
+    notifications:
+      # those are the cases you want to be notified in the transitions
+      empty: false
+        # this is the only state that is not a transition
+      equal: true
+        # if all the values continue equal 
+      different: false
+        # if all the values are different
+      partial_match: true
+        # if some values are equal

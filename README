@@ -6,3 +6,7 @@ DATABASE MONITOR
 CONFIGURATION
 
 	All the things you need to specify are in config.yml.sample. Once you want to use it, you need to rename it to config.yml.
+  You need to install the adapter gem of your database:
+    - if you use postgresql install the gem pg
+    - if you use mysql install the gem mysql
+    - if you use sqlite install the gem sqlite
