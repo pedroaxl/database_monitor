@@ -78,20 +78,25 @@ OLD QUERY
   #{old_result.inspect}         
       }
 
-      Pony.mail(
-      :to => config["email"]["to_address"],
-      :from => config["email"]["from_address"],
-      :subject => config["email"]["subject"],
-      :body => body,
-      :via => :smtp, :via_options => {
-        :address              => 'smtp.gmail.com',
-        :port                 => '587',
-        :enable_starttls_auto => true,
-        :user_name            => config["email"]["username"],
-        :password             => config["email"]["password"],
-        :authentication       => :plain, # :plain, :login, :cram_md5, no auth by default
-        :domain               => "localhost.localdomain" # the HELO domain provided by the client to the server
-      })
+      begin
+        Pony.mail(
+        :to => config["email"]["to_address"],
+        :from => config["email"]["from_address"],
+        :subject => config["email"]["subject"],
+        :body => body,
+        :via => :smtp, :via_options => {
+          :address              => 'smtp.gmail.com',
+          :port                 => '587',
+          :enable_starttls_auto => true,
+          :user_name            => config["email"]["username"],
+          :password             => config["email"]["password"],
+          :authentication       => :plain, # :plain, :login, :cram_md5, no auth by default
+          :domain               => config["email"]["from_address"].split('@').last # the HELO domain provided by the client to the server
+        })
+      rescue Net::SMTPUnknownError => e
+        puts e.inspect
+      end
+
     end
   end
 end
